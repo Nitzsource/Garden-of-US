@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>A Garden of Us</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to top, #c6f1ff 0%, #ffffff 100%);
+    }
+    .sky {
+      height: 40vh;
+      background: linear-gradient(to bottom, #aee2ff, #c6f1ff);
+      position: relative;
+      overflow: hidden;
+    }
+    .cloud {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.7;
+      animation: float 20s infinite linear;
+    }
+    .cloud.one {
+      width: 120px; height: 60px;
+      top: 40px; left: 10%;
+    }
+    .cloud.two {
+      width: 180px; height: 90px;
+      top: 80px; left: 60%;
+    }
+    .sun {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, #fff97c, #fdd835);
+      border-radius: 50%;
+      top: 50px;
+      left: 80%;
+      box-shadow: 0 0 50px #fdd835;
+    }
+    .garden {
+      background: #a2d99c;
+      min-height: 60vh;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .flower {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: pink;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+      transform: scale(0);
+      opacity: 0;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+      cursor: pointer;
+    }
+    .flower.reveal {
+      transform: scale(1);
+      opacity: 1;
+    }
+    .message {
+      text-align: center;
+      font-size: 1.2em;
+      margin: 20px auto;
+      max-width: 80%;
+      color: #444;
+      min-height: 2em;
+    }
+    audio {
+      display: none;
+    }
+    @keyframes float {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100vw); }
+    }
+  </style>
+</head>
+<body>
+  <audio autoplay loop>
+    <source src="birdsong.mp3" type="audio/mpeg">
+  </audio>
+  <div class="sky">
+    <div class="sun"></div>
+    <div class="cloud one"></div>
+    <div class="cloud two"></div>
+  </div>
+  <div class="garden" id="garden">
+    <!-- Flowers will appear one by one here -->
+  </div>
+  <div class="message" id="messageBox"></div>
+  <script>
+    const flowers = [
+      "🌷", "🌻", "🌼", "🌹", "💐", "🌺", "🌸", "🌿"
+    ];
+    const messages = [
+      "You’re my Tulip. Soft, elegant, and always blooming in my head rent-free.",
+      "You're my sun. I'm your sunflower. I’ll always turn to you — even when it's cloudy.",
+      "You’re like a daisy in my brain — simple, happy, and growing in all the quiet places I didn’t know needed you.",
+      "You: beautiful, romantic, sometimes spiky when annoyed. 🌹 Me: still obsessed.",
+      "You calm my chaos faster than chamomile tea and 7 missed calls from you.",
+      "You’re the peony to my ‘P.S. I still like your face.’",
+      "You’re warm like marigold petals and give the same Diwali vibes to my life.",
+      "You call me Honey. But you’re the sweetest thing I’ve ever known. Level 3 is growing as we speak..."
+    ];
+
+    let currentIndex = 0;
+    const garden = document.getElementById('garden');
+    const messageBox = document.getElementById('messageBox');
+
+    function createFlower(index) {
+      const div = document.createElement('div');
+      div.classList.add('flower');
+      div.innerText = flowers[index];
+      div.onclick = () => {
+        messageBox.innerText = messages[index];
+        div.classList.toggle('glow');
+      };
+      garden.appendChild(div);
+      setTimeout(() => div.classList.add('reveal'), 100);
+    }
+
+    function revealNextFlower() {
+      if (currentIndex < flowers.length) {
+        createFlower(currentIndex);
+        currentIndex++;
+        setTimeout(revealNextFlower, 1500);
+      }
+    }
+
+    window.onload = revealNextFlower;
+  </script>
+</body>
+</html>
